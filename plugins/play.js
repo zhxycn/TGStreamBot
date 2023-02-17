@@ -17,6 +17,7 @@ function play() {
       userName = msg.from.first_name;
     }
     const chatId = msg.chat.id;
+    const messageID = msg.message_id;
     const inputFile = match[1];
     const streamServer = config.streamServer;
     const fileExtension = inputFile
@@ -27,7 +28,12 @@ function play() {
       stream(inputFile, streamServer, mediaType);
       bot.sendMessage(
         chatId,
-        `Already streaming\n\nFile: ${inputFile}\nType: ${mediaType}`
+        `*Already streaming*\n\nFile: \`${inputFile}\`\nType: \`${mediaType}\``,
+        {
+          parse_mode: "MarkdownV2",
+          disable_web_page_preview: true,
+          reply_to_message_id: messageID,
+        }
       );
       console.table(
         `${userName}[${userID}] added ${inputFile} (video) to playlist`
@@ -37,13 +43,22 @@ function play() {
       stream(inputFile, streamServer, mediaType);
       bot.sendMessage(
         chatId,
-        `Already streaming\n\nFile: ${inputFile}\nType: ${mediaType}`
+        `*Already streaming*\n\nFile: \`${inputFile}\`\nType: \`${mediaType}\``,
+        {
+          parse_mode: "MarkdownV2",
+          disable_web_page_preview: true,
+          reply_to_message_id: messageID,
+        }
       );
       console.table(
         `${userName}[${userID}] added ${inputFile} (audio) to playlist`
       );
     } else {
-      bot.sendMessage(chatId, "Unsupported file format");
+      bot.sendMessage(chatId, `Unsupported file format`, {
+        parse_mode: "MarkdownV2",
+        disable_web_page_preview: true,
+        reply_to_message_id: messageID,
+      });
     }
   });
 }
